@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hm_shop/api/home.dart';
 import 'package:hm_shop/components/Home/Category.dart';
 import 'package:hm_shop/components/Home/Hot.dart';
 import 'package:hm_shop/components/Home/MoreList.dart';
@@ -14,23 +15,24 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final List<BannerItem> _bannerList = [
-    BannerItem(
-      id: "1",
-      imgUrl:
-          "https://pic.rmb.bdstatic.com/bjh/news/d784e0991477b5a84f4ed1de4f1693c7.png",
-    ),
-    BannerItem(
-      id: "2",
-      imgUrl:
-          "https://img-nos.yiyouliao.com/alph/73c0cf110d2a14e92f48633db4a833c8.jpeg?yiyouliao_channel=vivo_image",
-    ),
-    BannerItem(
-      id: "3",
-      imgUrl:
-          "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg",
-    ),
-  ];
+    List<BannerItem> _bannerList = [];
+    //[
+  //   BannerItem(
+  //     id: "1",
+  //     imgUrl:
+  //         "https://pic.rmb.bdstatic.com/bjh/news/d784e0991477b5a84f4ed1de4f1693c7.png",
+  //   ),
+  //   BannerItem(
+  //     id: "2",
+  //     imgUrl:
+  //         "https://img-nos.yiyouliao.com/alph/73c0cf110d2a14e92f48633db4a833c8.jpeg?yiyouliao_channel=vivo_image",
+  //   ),
+  //   BannerItem(
+  //     id: "3",
+  //     imgUrl:
+  //         "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg",
+  //   ),
+  // ];
 
   List<Widget> _getScrollChildern() {
     return [
@@ -56,6 +58,18 @@ class _HomeViewState extends State<HomeView> {
       SliverToBoxAdapter(child: SizedBox(height: 10)),
       MoreList(),
     ];
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getBannerList();
+  }
+
+  void _getBannerList() async {
+    _bannerList = await getBannerListAPI();
+    setState(() {});
   }
 
   @override
