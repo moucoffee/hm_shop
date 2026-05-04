@@ -15,6 +15,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  List<GoodDetailItem> _recommendList = [];
+
   //一站式推荐
   SpecialRecommendResult _oneStopResult = SpecialRecommendResult(
     id: "",
@@ -39,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
   List<CategoryItem> _categoryList = [];
   //轮播图列表
   List<BannerItem> _bannerList = [];
-    //[
+  //[
   //   BannerItem(
   //     id: "1",
   //     imgUrl:
@@ -63,7 +65,9 @@ class _HomeViewState extends State<HomeView> {
       SliverToBoxAdapter(child: SizedBox(height: 10)),
       SliverToBoxAdapter(child: Category(categoryList: _categoryList)),
       SliverToBoxAdapter(child: SizedBox(height: 10)),
-      SliverToBoxAdapter(child: Suggestion(specialRecommendResult: _specialRecommendResult)),
+      SliverToBoxAdapter(
+        child: Suggestion(specialRecommendResult: _specialRecommendResult),
+      ),
       SliverToBoxAdapter(child: SizedBox(height: 10)),
       SliverToBoxAdapter(
         child: Padding(
@@ -71,15 +75,19 @@ class _HomeViewState extends State<HomeView> {
           child: Flex(
             direction: Axis.horizontal,
             children: [
-              Expanded(child: Hot(result: _inVogueResult, type: "hot")),
+              Expanded(
+                child: Hot(result: _inVogueResult, type: "hot"),
+              ),
               SizedBox(width: 10),
-              Expanded(child: Hot(result: _oneStopResult, type: "step")),
+              Expanded(
+                child: Hot(result: _oneStopResult, type: "step"),
+              ),
             ],
           ),
         ),
       ),
       SliverToBoxAdapter(child: SizedBox(height: 10)),
-      MoreList(),
+      MoreList(recommendList: _recommendList),
     ];
   }
 
@@ -92,6 +100,33 @@ class _HomeViewState extends State<HomeView> {
     _getProductList();
     _getInVogueList();
     _getOneStopList();
+    _getRecommendList();
+    _registerEvent();
+  }
+
+  void _registerEvent() {
+    _controller.addListener( () {
+      if(_controller.position.pixels >= 
+        (_controller.position.maxScrollExtent - 50)
+      ) {
+        _getRecommendList();
+      }
+    });
+  }
+
+  int _page = 1;
+  bool _isloading = false; //当前正在加载
+  bool _hasMore = true; //是否还有下一页
+
+  void _getRecommendList() async {
+    if(_isloading || !_hasMore) return;
+    _isloading = true;
+    int requestLimit = _page * 8;
+    _recommendList = await getRecommendListAPI({"limit": requestLimit});
+    _isloading = false;
+    setState(() {});
+    if(_recommendList.length < requestLimit) {_hasMore = false; return;}
+    _page ++;
   }
 
   //获取一站式推荐
@@ -123,9 +158,10 @@ class _HomeViewState extends State<HomeView> {
     _bannerList = await getBannerListAPI();
     setState(() {});
   }
-
+  final ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: _getScrollChildern());
+    return CustomScrollView(slivers: _getScrollChildern(),
+    controller:  _controller,);
   }
 }
