@@ -10,4 +10,8 @@ class HttpContants {
   static const String BANNER_LIST = "/home/banner";
   static const String CATEGORY_LIST = "/home/category/head";
   static const String PRODUCT_LIST = "/hot/preference"; //特惠推荐地址
+  static const String IN_VOGUE_LIST = "/hot/inVogue"; //热榜推荐地址
+  static const String ONE_STOP_LIST = "/hot/oneStop"; //一站式推荐地址
+
+
 }

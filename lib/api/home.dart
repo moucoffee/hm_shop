@@ -37,3 +37,12 @@ Future<SpecialRecommendResult> getProductListAPI() async {
   //返回请求
   return SpecialRecommendResult.formJSON(await dioRequest.get(HttpContants.PRODUCT_LIST));
 }
+
+Future<SpecialRecommendResult> getInVogueListAPI() async {
+  return SpecialRecommendResult.formJSON(await dioRequest.get(HttpContants.IN_VOGUE_LIST));
+}
+
+
+Future<SpecialRecommendResult> getOneStopListAPI() async {
+  return SpecialRecommendResult.formJSON(await dioRequest.get(HttpContants.ONE_STOP_LIST));
+}
