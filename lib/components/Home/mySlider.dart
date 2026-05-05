@@ -46,7 +46,7 @@ class _SliderState extends State<Myslider> {
       return Positioned(
         left: 0,
         right: 0,
-        top: 10,
+        top: MediaQuery.of(context).padding.top,//安全区距离
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Container(

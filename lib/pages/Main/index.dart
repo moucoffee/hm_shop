@@ -69,7 +69,6 @@ class _MainPageState extends State<MainPage> {
   final UserController _userController = Get.put(UserController());
   _initUser() async {
     await tokenmanager.init();
-    print("token值为： ${tokenmanager.getToken()}");
     if(tokenmanager.getToken().isNotEmpty){
       _userController.updateUserInfo(await getUserInfoAPI());
     }
@@ -79,9 +78,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: IndexedStack(index: _currentIndex, children: _getShowWidget()),
-      ),
+      body: IndexedStack(index: _currentIndex, children: _getShowWidget()),
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: true,
         selectedItemColor: Colors.black,

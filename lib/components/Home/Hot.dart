@@ -49,14 +49,14 @@ class _HotState extends State<Hot> {
               errorBuilder: (context, error, stackTrace) {
                 return Image.asset(
                   "lib/assets/home_cmd_inner.png",
-                  width: 80,
-                  height: 100,
+                  width: 70,
+                  height: 70,
                   fit: BoxFit.cover,
                 );
               },
               list[index].picture,
-              width: 80,
-              height: 80,
+              width: 70,
+              height: 70,
               fit: BoxFit.cover,
             ),
           ),
