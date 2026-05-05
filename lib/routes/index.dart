@@ -6,7 +6,7 @@ import 'package:hm_shop/pages/Main/index.dart';
 
 Widget getRootWidget(){
   return MaterialApp(
-    initialRoute: "/login",
+    initialRoute: "/",
     routes:getRootRoutes(),
   );
 }

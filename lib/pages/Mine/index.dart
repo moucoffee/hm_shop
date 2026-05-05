@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hm_shop/api/mine.dart';
 import 'package:hm_shop/components/Home/MoreList.dart';
 import 'package:hm_shop/components/Mine/Guess.dart';
+import 'package:hm_shop/stores/userController.dart';
 import 'package:hm_shop/viewmodels/home.dart';
 // import 'package:get/get.dart';
 // import 'package:hm_shop/api/mine.dart';
@@ -20,7 +22,7 @@ class MineView extends StatefulWidget {
 }
 
 class _MineViewState extends State<MineView> {
-//   final UserController _userController = Get.find();
+  final UserController _userController = Get.put(UserController());
 //   // 返回退出登录的元素
 //   Widget _getLogout() {
 //     return _userController.user.value.id.isNotEmpty
@@ -64,60 +66,60 @@ class _MineViewState extends State<MineView> {
 //         : Text("");
 //   }
 
-  // Widget _buildHeader() {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //       gradient: LinearGradient(
-  //         begin: Alignment.topCenter,
-  //         end: Alignment.bottomCenter,
-  //         colors: [const Color(0xFFFFF2E8), const Color(0xFFFDF6F1)],
-  //       ),
-  //     ),
-  //     padding: const EdgeInsets.only(left: 20, right: 40, top: 80, bottom: 20),
-  //     child: Row(
-  //       children: [
-  //         Obx(() {
-  //           return CircleAvatar(
-  //             radius: 26,
-  //             backgroundImage: _userController.user.value.avatar.isNotEmpty
-  //                 ? NetworkImage(_userController.user.value.avatar)
-  //                 : AssetImage('lib/assets/goods_avatar.png'),
-  //             backgroundColor: Colors.white,
-  //           );
-  //         }),
-  //         const SizedBox(width: 12),
-  //         Expanded(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Obx(() {
-  //                 // Obx中必须得有可监测的响应式数据
-  //                 return GestureDetector(
-  //                   onTap: () {
-  //                     if (_userController.user.value.id.isEmpty) {
-  //                       // 当没有用户信息的时候可以去登录
-  //                       Navigator.pushNamed(context, "/login");
-  //                     }
-  //                   },
-  //                   child: Text(
-  //                     _userController.user.value.id.isNotEmpty
-  //                         ? _userController.user.value.account
-  //                         : '立即登录', // 有登录信息 显示用户信息 否则显示立即登录
-  //                     style: TextStyle(
-  //                       fontSize: 18,
-  //                       fontWeight: FontWeight.w600,
-  //                     ),
-  //                   ),
-  //                 );
-  //               }),
-  //             ],
-  //           ),
-  //         ),
-  //         Obx(() => _getLogout()),
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget _buildHeader() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [const Color(0xFFFFF2E8), const Color(0xFFFDF6F1)],
+        ),
+      ),
+      padding: const EdgeInsets.only(left: 20, right: 40, top: 80, bottom: 20),
+      child: Row(
+        children: [
+          Obx(() {
+            return CircleAvatar(
+              radius: 26,
+              backgroundImage: _userController.user.value.avatar.isNotEmpty
+                  ? NetworkImage(_userController.user.value.avatar)
+                  : AssetImage('lib/assets/goods_avatar.png'),
+              backgroundColor: Colors.white,
+            );
+          }),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() {
+                  // Obx中必须得有可监测的响应式数据
+                  return GestureDetector(
+                    onTap: () {
+                      if (_userController.user.value.id.isEmpty) {
+                        // 当没有用户信息的时候可以去登录
+                        Navigator.pushNamed(context, "/login");
+                      }
+                    },
+                    child: Text(
+                      _userController.user.value.id.isNotEmpty
+                          ? _userController.user.value.account
+                          : '立即登录', // 有登录信息 显示用户信息 否则显示立即登录
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+          //Obx(() => _getLogout()),
+        ],
+      ),
+    );
+  }
 
   Widget _buildVipCard() {
     return Padding(
@@ -297,7 +299,7 @@ class _MineViewState extends State<MineView> {
     return CustomScrollView(
       controller: _controller,
       slivers: [
-        //SliverToBoxAdapter(child: _buildHeader()),
+        SliverToBoxAdapter(child: _buildHeader()),
         SliverToBoxAdapter(child: _buildVipCard()),
         SliverToBoxAdapter(child: _buildQuickActions()),
         SliverToBoxAdapter(child: _buildOrderModule()),
