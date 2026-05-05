@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hm_shop/contants/index.dart';
+import 'package:hm_shop/stores/TokenManager.dart';
 
 class DioRequest {
   final _dio = Dio();
@@ -19,6 +20,13 @@ class DioRequest {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (request, handler){
+
+          if(tokenmanager.getToken().isNotEmpty) {
+            request.headers = {
+              "Authorization" : "Bearer ${tokenmanager.getToken()}",
+            };
+          }
+
           handler.next(request);
         },
         onResponse: (response, handler){
