@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hm_shop/api/home.dart';
 import 'package:hm_shop/components/Home/Category.dart';
 import 'package:hm_shop/components/Home/Hot.dart';
 import 'package:hm_shop/components/Home/MoreList.dart';
-import 'package:hm_shop/components/Home/Slider.dart';
 import 'package:hm_shop/components/Home/Suggestion.dart';
+import 'package:hm_shop/components/Home/mySlider.dart';
+import 'package:hm_shop/utils/ToastUtils.dart';
 import 'package:hm_shop/viewmodels/home.dart';
 
 class HomeView extends StatefulWidget {
@@ -61,7 +63,7 @@ class _HomeViewState extends State<HomeView> {
 
   List<Widget> _getScrollChildern() {
     return [
-      SliverToBoxAdapter(child: Slider(bannerList: _bannerList)),
+      SliverToBoxAdapter(child: Myslider(bannerList: _bannerList)),
       SliverToBoxAdapter(child: SizedBox(height: 10)),
       SliverToBoxAdapter(child: Category(categoryList: _categoryList)),
       SliverToBoxAdapter(child: SizedBox(height: 10)),
@@ -105,10 +107,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _registerEvent() {
-    _controller.addListener( () {
-      if(_controller.position.pixels >= 
-        (_controller.position.maxScrollExtent - 50)
-      ) {
+    _controller.addListener(() {
+      if (_controller.position.pixels >=
+          (_controller.position.maxScrollExtent - 50)) {
         _getRecommendList();
       }
     });
@@ -118,50 +119,73 @@ class _HomeViewState extends State<HomeView> {
   bool _isloading = false; //当前正在加载
   bool _hasMore = true; //是否还有下一页
 
-  void _getRecommendList() async {
-    if(_isloading || !_hasMore) return;
+  Future<void> _getRecommendList() async {
+    if (_isloading || !_hasMore) return;
     _isloading = true;
     int requestLimit = _page * 8;
     _recommendList = await getRecommendListAPI({"limit": requestLimit});
     _isloading = false;
     setState(() {});
-    if(_recommendList.length < requestLimit) {_hasMore = false; return;}
-    _page ++;
+    if (_recommendList.length < requestLimit) {
+      _hasMore = false;
+      return;
+    }
+    _page++;
   }
 
   //获取一站式推荐
-  void _getOneStopList() async {
+  Future<void> _getOneStopList() async {
     _oneStopResult = await getOneStopListAPI();
     setState(() {});
   }
 
   //获取热榜推荐
-  void _getInVogueList() async {
+  Future<void> _getInVogueList() async {
     _inVogueResult = await getInVogueListAPI();
     setState(() {});
   }
 
   //获取特惠推荐
-  void _getProductList() async {
+  Future<void> _getProductList() async {
     _specialRecommendResult = await getProductListAPI();
     setState(() {});
   }
 
   //获取分类列表
-  void _getCategoryList() async {
+  Future<void> _getCategoryList() async {
     _categoryList = await getCategoryListAPI();
     setState(() {});
   }
 
   //获取轮播图列表
-  void _getBannerList() async {
+  Future<void> _getBannerList() async {
     _bannerList = await getBannerListAPI();
     setState(() {});
   }
+
+  Future<void> _onRefresh() async {
+    _page = 1;
+    _isloading = false;
+    _hasMore = true;
+    await _getBannerList();
+    await _getCategoryList();
+    await _getProductList();
+    await _getInVogueList();
+    await _getOneStopList();
+    await _getRecommendList();
+
+    Toastutils.showToast(context, "刷新成功");
+  }
+
   final ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: _getScrollChildern(),
-    controller:  _controller,);
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: CustomScrollView(
+        slivers: _getScrollChildern(),
+        controller: _controller,
+      ),
+    );
   }
 }

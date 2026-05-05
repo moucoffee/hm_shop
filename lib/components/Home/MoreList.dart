@@ -96,5 +96,5 @@ class _MoreListState extends State<MoreList> {
         );
       },
     );
-  }
+  } 
 }

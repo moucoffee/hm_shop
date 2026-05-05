@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_shop/viewmodels/home.dart';
 
-class Slider extends StatefulWidget {
+class Myslider extends StatefulWidget {
   final List<BannerItem> bannerList;
-  Slider({Key? key, required this.bannerList}) : super(key: key);
+  Myslider({Key? key, required this.bannerList}) : super(key: key);
 
   @override
   _SliderState createState() => _SliderState();
 }
 
-class _SliderState extends State<Slider> {
+class _SliderState extends State<Myslider> {
   CarouselSliderController _controller = CarouselSliderController();
   int _currentIndex = 0;
 
